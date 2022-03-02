@@ -1,0 +1,6 @@
+/tmp/
+# Used by dotenv library to load environment variables.
+# .env
+/.bundle/
+/vendor/bundle
+/lib/bundler/man/
