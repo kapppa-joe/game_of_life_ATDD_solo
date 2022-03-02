@@ -1,3 +1,3 @@
-# Empty ruby repo
+# (WIP) Conway Game of Life ATDD
 
-A empty ruby repo initialized with the basic config files for my own convienence.
+(Work in progress) An implementation of Conway's game of life in Ruby and rspec.
