@@ -181,7 +181,6 @@ describe GameOfLife do
           end
         end
 
-
         context 'in a 3 x 1 grid, being the cell in the middle' do
           it 'return 0 when both upper and lower are dead cell' do
             grid = [[:dead],
@@ -229,6 +228,151 @@ describe GameOfLife do
 
             actual_output = subject.count_living_neighbours(grid, row_index, column_index)
             expect(actual_output).to eql expected_output
+          end
+        end
+
+        context 'in a 3 x 3 grid, being the cell in the middle' do
+            # base_grid = [ 
+            #   [upper_left, upper,        upper_right],
+            #   [left,       current_cell, right      ],
+            #   [lower_left, lower,        lower_right]
+            # ]
+          it 'return 0 when no neighbour cells are alive' do
+            grid = [
+              [:dead, :dead,        :dead],
+              [:dead, current_cell, :dead],
+              [:dead, :dead,        :dead]
+            ]
+            row_index = 1
+            column_index = 1
+            expected_output = 0
+
+            actual_output = subject.count_living_neighbours(grid, row_index, column_index)
+            expect(actual_output).to eql expected_output
+          end
+
+          describe 'can count the number of living neighbours in left, right, upper, lower correctly' do
+            (1..4).each do |number_of_living_neighbours|
+              combinations_of_cells =
+                [:live] * number_of_living_neighbours +
+                [:dead] * (4 - number_of_living_neighbours)
+              combinations_of_cells.permutation.uniq.each do |combination|
+                upper, left, right, lower = combination
+
+                grid = [
+                  [:dead, upper,        :dead],
+                  [left,  current_cell, right],
+                  [:dead, lower,        :dead]
+                ]
+                row_index = 1
+                column_index = 1
+
+                it "grid: #{grid}, number_of_living_neighbours: #{number_of_living_neighbours}" do
+                  expected_output = number_of_living_neighbours
+
+                  actual_output = subject.count_living_neighbours(grid, row_index, column_index)
+                  expect(actual_output).to eql expected_output
+                  end
+              end
+            end
+          end
+
+          describe 'can count the number of living neighbours in diagonal positions' do
+            it 'when upper_left is :live' do
+              grid = [
+                [:live, :dead,        :dead],
+                [:dead, current_cell, :dead],
+                [:dead, :dead,        :dead]
+              ]
+              row_index = 1
+              column_index = 1
+              expected_output = 1
+
+              actual_output = subject.count_living_neighbours(grid, row_index, column_index)
+              expect(actual_output).to eql expected_output
+            end
+
+            it 'when upper_right is :live' do
+              grid = [
+                [:dead, :dead,        :live],
+                [:dead, current_cell, :dead],
+                [:dead, :dead,        :dead]
+              ]
+              row_index = 1
+              column_index = 1
+              expected_output = 1
+
+              actual_output = subject.count_living_neighbours(grid, row_index, column_index)
+              expect(actual_output).to eql expected_output
+            end
+
+            it 'when lower_left is :live' do
+              grid = [
+                [:dead, :dead,        :dead],
+                [:dead, current_cell, :dead],
+                [:live, :dead,        :dead]
+              ]
+              row_index = 1
+              column_index = 1
+              expected_output = 1
+
+              actual_output = subject.count_living_neighbours(grid, row_index, column_index)
+              expect(actual_output).to eql expected_output
+            end
+
+            it 'when lower_right is :live' do
+              grid = [
+                [:dead, :dead,        :dead],
+                [:dead, current_cell, :dead],
+                [:dead, :dead,        :live]
+              ]
+              row_index = 1
+              column_index = 1
+              expected_output = 1
+
+              actual_output = subject.count_living_neighbours(grid, row_index, column_index)
+              expect(actual_output).to eql expected_output
+            end
+          end
+
+          describe 'can count the number of living neighbours in all 8 directions correctly' do
+            test_cases = [
+              [[
+                [:live, :live,        :dead],
+                [:dead, current_cell, :dead],
+                [:dead, :dead,        :live]
+              ], 3],
+              [[
+                [:live, :dead,        :live],
+                [:dead, current_cell, :live],
+                [:live, :dead,        :live]
+              ], 5],
+              [[
+                [:dead, :live,        :dead],
+                [:live, current_cell, :dead],
+                [:live, :dead,        :live]
+              ], 4],
+              [[
+                [:live, :dead,        :live],
+                [:live, current_cell, :dead],
+                [:live, :live,        :dead]
+              ], 5],
+              [[
+                [:live, :live,        :live],
+                [:live, current_cell, :live],
+                [:live, :live,        :live]
+              ], 8]
+            ]
+            test_cases.each do |grid, number_of_living_neighbours|
+              it "test case with grid: #{grid}, number_of_living_neighbours: #{number_of_living_neighbours}"do
+                row_index = 1
+                column_index = 1
+                expected_output = number_of_living_neighbours
+
+                actual_output = subject.count_living_neighbours(grid, row_index, column_index)
+                expect(actual_output).to eql expected_output
+              end
+            end
           end
         end
       end
