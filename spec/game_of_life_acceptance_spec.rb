@@ -51,4 +51,31 @@ describe 'game of life' do
       end
     end
   end
+
+  context 'in a 6x6 grid' do
+    it 'can demonstrate the oscillators pattern of "toad"' do
+      grid_1 = [
+        [:dead, :dead, :dead, :dead, :dead, :dead],
+        [:dead, :dead, :dead, :dead, :dead, :dead],
+        [:dead, :dead, :live, :live, :live, :dead],
+        [:dead, :live, :live, :live, :dead, :dead],
+        [:dead, :dead, :dead, :dead, :dead, :dead],
+        [:dead, :dead, :dead, :dead, :dead, :dead],
+      ]
+
+      grid_2 = [
+        [:dead, :dead, :dead, :dead, :dead, :dead],
+        [:dead, :dead, :dead, :live, :dead, :dead],
+        [:dead, :live, :dead, :dead, :live, :dead],
+        [:dead, :live, :dead, :dead, :live, :dead],
+        [:dead, :dead, :live, :dead, :dead, :dead],
+        [:dead, :dead, :dead, :dead, :dead, :dead],
+      ]
+
+      game_of_life = GameOfLife.new
+
+      expect(game_of_life.get_next_grid(grid_1)).to eql grid_2
+      expect(game_of_life.get_next_grid(grid_2)).to eql grid_1
+    end
+  end
 end
