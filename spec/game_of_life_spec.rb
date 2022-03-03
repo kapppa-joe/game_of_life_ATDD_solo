@@ -232,11 +232,11 @@ describe GameOfLife do
         end
 
         context 'in a 3 x 3 grid, being the cell in the middle' do
-            # base_grid = [ 
-            #   [upper_left, upper,        upper_right],
-            #   [left,       current_cell, right      ],
-            #   [lower_left, lower,        lower_right]
-            # ]
+          # base_grid = [
+          #   [upper_left, upper,        upper_right],
+          #   [left,       current_cell, right      ],
+          #   [lower_left, lower,        lower_right]
+          # ]
           it 'return 0 when no neighbour cells are alive' do
             grid = [
               [:dead, :dead,        :dead],
@@ -272,7 +272,7 @@ describe GameOfLife do
 
                   actual_output = subject.count_living_neighbours(grid, row_index, column_index)
                   expect(actual_output).to eql expected_output
-                  end
+                end
               end
             end
           end
@@ -364,7 +364,7 @@ describe GameOfLife do
               ], 8]
             ]
             test_cases.each do |grid, number_of_living_neighbours|
-              it "test case with grid: #{grid}, number_of_living_neighbours: #{number_of_living_neighbours}"do
+              it "test case with grid: #{grid}, number_of_living_neighbours: #{number_of_living_neighbours}" do
                 row_index = 1
                 column_index = 1
                 expected_output = number_of_living_neighbours
@@ -374,6 +374,35 @@ describe GameOfLife do
               end
             end
           end
+        end
+      end
+    end
+
+    context 'test in a larger grid' do
+      test_grid = [
+        [:live, :live, :dead, :dead, :live, :live, :dead, :live],
+        [:dead, :live, :dead, :dead, :live, :dead, :live, :dead],
+        [:live, :dead, :dead, :live, :live, :live, :dead, :dead],
+        [:live, :dead, :live, :live, :live, :dead, :live, :dead],
+        [:dead, :dead, :live, :dead, :live, :dead, :live, :dead]
+      ]
+
+      test_cases = {
+        [0, 0] => 2,
+        [0, 4] => 1,
+        [2, 4] => 2,
+        [4, 2] => 5,
+        [7, 1] => 2,
+        [6, 3] => 2,
+        [7, 4] => 2
+      }
+      test_cases.each do |current_cell_coordinate, living_neighbours|
+        column_index, row_index = current_cell_coordinate
+        it "when current cell is (#{column_index},#{row_index}) in test grid, should return #{living_neighbours} living neighbours" do
+          expected_output = living_neighbours
+
+          actual_output = subject.count_living_neighbours(test_grid, row_index, column_index)
+          expect(actual_output).to eql expected_output
         end
       end
     end
